@@ -9,13 +9,13 @@ filter_func.restype = ctypes.c_double
 class IIRFilter:
     def createCoeffs(self, order, cutoff,filterType,design,rp=1, rs=1,fs=0):
         
-        #defining the acceptable inputs for the design and filterType params
+        # Defining the acceptable inputs for the design and filterType params
         designs = ['butter','cheby1','cheby2']
         filterTypes1 = ['lowpass','highpass','Lowpass','Highpass','low','high']
         filterTypes2 = ['bandstop','bandpass','Bandstop','Bandpass']
         
-        #Error handling: other errors can arise too, but those are dealt with 
-        #in the signal package.
+        # Error handling: other errors can arise too, but those are dealt with 
+        # in the signal package.
         self.isThereAnError = 1 #if there was no error then it will be set to 0
         self.COEFFS = [0] #with no error this will hold the coefficients
         
@@ -29,7 +29,7 @@ class IIRFilter:
         else:
             self.isThereAnError = 0
         
-        #if fs was given then the given cutoffs need to be normalised to Nyquist
+        # If fs was given then the given cutoffs need to be normalised to Nyquist
         if fs and self.isThereAnError == 0:
             for i in range(len(cutoff)):
                 cutoff[i] = cutoff[i]/fs*2
@@ -80,7 +80,5 @@ class IIRFilter:
         print(list(self.IIRCOEFFS))
     
     def filter(self,data):
-        #data = (ctypes.c_double * len(pydata))(*pydata)
         filter_func(data,len(data),self.pystages,self.acc_input,self.acc_output,self.buffer1,self.buffer2,self.FIRCOEFFS,self.IIRCOEFFS)
-        #pydata[:] = data
         return data
